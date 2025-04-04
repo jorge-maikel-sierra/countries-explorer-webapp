@@ -1,0 +1,62 @@
+body {
+    padding: 25px;
+    background-color: hsl(200, 15%, 8%); /* Very Light Gray for Light Mode Background */
+    color: hsl(0, 0%, 100%); /* Very Dark Blue for Light Mode Text */
+    font-size: 16px;
+    font-family: Nunito, sans-serif;
+    transition: all 0.3s ease; /* Smooth transition for background and text color changes */
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    background-color: hsl(209, 23%, 22%); /* Dark Mode Elements */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode header {
+    background-color: hsl(0, 0%, 100%); /* Light Mode Elements */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Adding styles for light mode */
+.light-mode {
+    background-color: hsl(200, 15%, 8%); /* Light Mode Background */
+    color: hsl(0, 2%, 12%); /* Dark Mode Text */
+}
+
+.dark-mode {
+    background-color: hsl(0, 0%, 100%); /* Very Dark Blue for Dark Mode Background */
+    color: hsl(207, 26%, 17%);
+}
+
+/* Adding styles for elements in both modes */
+
+.theme-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.theme-switch button {
+    margin-left: auto;
+    background-color: hsl(0, 0%, 100%); /* Very Dark Blue for Light Mode Button */
+    color: hsl(200, 15%, 8%); /* Very Light Gray for Light Mode Text */
+    border-radius: 5px;
+    font-size: 25px;
+    font-family: Nunito, sans-serif;
+    font-weight: 600;
+    padding: 5px 10px;
+    transition: all 0.3s ease; /* Smooth transition for button background and text color changes */
+}
