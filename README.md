@@ -58,40 +58,88 @@ Durante este proyecto, adquirí varios conocimientos importantes que me gustarí
 - **Manejo de APIs REST**: Aprendí a realizar peticiones a la API de países y manejar las respuestas.
 
 ```javascript
-const fetchCountries = async () => {
+async function fetchData() {
   try {
-    const response = await fetch('https://restcountries.com/v3.1/all');
+    const response = await fetch("data.json");
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
-    setCountries(data);
+    allCountries = data;
+    return data;
   } catch (error) {
-    console.error('Error fetching countries:', error);
+    console.error("Error fetching data:", error);
+    return [];
   }
-};
+}
 ```
 
 - **Implementación del tema oscuro**: Logré implementar un sistema de cambio de tema utilizando CSS variables.
 
 ```css
 :root {
-  --bg-color: white;
-  --text-color: hsl(200, 15%, 8%);
+    --very-dark-blue-bg: hsl(207, 26%, 17%);
+    --dark-blue-elements: hsl(209, 23%, 22%);
+    --very-dark-blue-text: hsl(200, 15%, 8%);
+    --dark-gray-input: hsl(0, 0%, 52%);
+    --very-light-gray-bg: hsl(0, 0%, 98%);
+    --white: hsl(0, 0%, 100%);
 }
 
-[data-theme='dark'] {
-  --bg-color: hsl(207, 26%, 17%);
-  --text-color: white;
-}
 ```
 
 - **Filtrado de datos**: Implementé un sistema de búsqueda y filtrado eficiente.
 
 ```javascript
-const filterCountries = (searchTerm, region) => {
-  return countries.filter(country => 
-    country.name.common.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (region === '' || country.region === region)
-  );
-};
+// Función para manejar la búsqueda
+function handleSearch() {
+  const searchBar = document.getElementById("searchBar");
+  if (!searchBar) {
+    console.error("Elemento searchBar no encontrado");
+    return;
+  }
+
+  const searchTerm = searchBar.value.toLowerCase().trim();
+
+  // Verificar que allCountries sea un array
+  if (!Array.isArray(allCountries)) {
+    console.error("No hay datos de países disponibles");
+    return;
+  }
+
+  // Si el término de búsqueda está vacío, mostrar todos los países
+  if (searchTerm === "") {
+    displayData(allCountries);
+    return;
+  }
+
+  const filteredCountries = allCountries.filter((country) => {
+    // Verificar que country sea un objeto válido
+    if (!country) return false;
+
+    // Buscar en múltiples campos con verificaciones de existencia
+    return (
+      (country.name && country.name.toLowerCase().includes(searchTerm)) ||
+      (country.capital && country.capital.toLowerCase().includes(searchTerm)) ||
+      (country.region && country.region.toLowerCase().includes(searchTerm)) ||
+      (country.subregion &&
+        country.subregion.toLowerCase().includes(searchTerm)) ||
+      (country.population &&
+        country.population.toString().includes(searchTerm)) ||
+      (country.languages &&
+        Array.isArray(country.languages) &&
+        country.languages.some(
+          (lang) =>
+            lang && lang.name && lang.name.toLowerCase().includes(searchTerm)
+        ))
+    );
+  });
+
+  // Mostrar los países filtrados
+  displayData(filteredCountries);
+}
 ```
 
 ### Desarrollo continuo
