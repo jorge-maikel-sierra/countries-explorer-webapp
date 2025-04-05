@@ -1,132 +1,204 @@
 :root {
-    --bg-color: white;
-    --text-color: hsl(200, 15%, 8%);
-    /* Color oscuro para texto en modo claro */
-}
-
-.dark-mode {
-    --bg-color: hsl(207, 26%, 17%);
-    /* Fondo oscuro */
-    --text-color: white;
-    /* Texto claro */
+    --very-dark-blue-bg: hsl(207, 26%, 17%);
+    --dark-blue-elements: hsl(209, 23%, 22%);
+    --very-dark-blue-text: hsl(200, 15%, 8%);
+    --dark-gray-input: hsl(0, 0%, 52%);
+    --very-light-gray-bg: hsl(0, 0%, 98%);
+    --white: hsl(0, 0%, 100%);
 }
 
 body {
-    padding: 25px;
-    background-color: hsl(200, 15%, 8%); /* Very Light Gray for Light Mode Background */
-    color: hsl(0, 0%, 100%); /* Very Dark Blue for Light Mode Text */
-    font-size: 16px;
-    font-family: Nunito, sans-serif;
-    transition: all 0.3s ease; /* Smooth transition for background and text color changes */
+    font-family: 'Nunito Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--very-light-gray-bg);
+    color: var(--very-dark-blue-text);
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 14px;
 }
 
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 10px;
-    width: 100%;
-    padding: 10px;
-    margin: 10px;
-    background-color: hsl(209, 23%, 22%); /* Dark Mode Elements */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Modo oscuro */
+body.dark-mode {
+    background-color: var(--very-dark-blue-bg);
+    color: var(--white);
 }
 
-.dark-mode header {
-    background-color: hsl(0, 0%, 100%); /* Light Mode Elements */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Adding styles for light mode */
-.light-mode {
-    background-color: hsl(200, 15%, 8%); /* Light Mode Background */
-    color: hsl(0, 2%, 12%); /* Dark Mode Text */
-}
-
-.dark-mode {
-    background-color: hsl(0, 0%, 100%); /* Very Dark Blue for Dark Mode Background */
-    color: hsl(207, 26%, 17%);
-}
-
-/* Adding styles for elements in both modes */
-
-.theme-switch {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.theme-switch {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.theme-switch button {
-    margin-left: auto;
-    background-color: hsl(0, 0%, 100%); /* Very Dark Blue for Light Mode Button */
-    color: hsl(200, 15%, 8%); /* Very Light Gray for Light Mode Text */
-    border-radius: 5px;
-    font-size: 25px;
-    font-family: Nunito, sans-serif;
-    font-weight: 600;
-    padding: 5px 10px;
-    transition: all 0.3s ease; /* Smooth transition for button background and text color changes */
-}
-
-#dataContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.country {
-    border: 1px solid #312b2b;
-    border-radius: 8px;
-    padding: 16px;
-    background-color: var(--bg-color, white);
-    color: var(--text-color, hsl(200, 15%, 8%));
-    font-size: 16px;
-    font-family: Nunito, sans-serif;
-    font-weight: 600;
-    box-sizing: border-box;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.header {
+    background-color: var(--white);
+    color: var(--very-dark-blue-text);
+    padding: 1rem;
     text-align: center;
-    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.country img {
-    border-radius: 8px;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    max-width: 100%;
-    height: 40%;
+body.dark-mode .header {
+    background-color: var(--dark-blue-elements);
+    color: var(--white);
 }
 
-.country:hover {
-    transform: scale(1.05);
+.search-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
-
 
 #searchBar {
     width: 100%;
-    max-width: 400px;
-    padding: 10px;
-    margin: 20px auto;
-    display: block;
-    border: 1px solid hsl(200, 15%, 80%);
+    padding: 0.8rem;
+    font-size: 14px;
+    border: none;
     border-radius: 5px;
-    font-size: 16px;
-    font-family: Nunito, sans-serif;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    color: var(--very-dark-blue-text);
 }
 
-#searchBar:focus {
-    outline: none;
-    border-color: hsl(209, 23%, 22%);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+body.dark-mode #searchBar {
+    background-color: var(--dark-blue-elements);
+    color: var(--white);
+}
+
+#darkModeButton {
+    background-color: var(--white);
+    color: var(--very-dark-blue-text);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    font-weight: 600;
+}
+
+body.dark-mode #darkModeButton {
+    background-color: var(--dark-blue-elements);
+    color: var(--white);
+}
+
+#countries-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.result-count {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--very-dark-blue-text);
+}
+
+body.dark-mode .result-count {
+    color: var(--white);
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.country-card {
+    background-color: var(--white);
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+body.dark-mode .country-card {
+    background-color: var(--dark-blue-elements);
+}
+
+.country-card:hover {
+    transform: translateY(-5px);
+}
+
+.country-header {
+    padding: 10px;
+    background-color: var(--white);
+    color: var(--very-dark-blue-text);
+}
+
+body.dark-mode .country-header {
+    background-color: var(--dark-blue-elements);
+    color: var(--white);
+}
+
+.country-flag {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: none;
+}
+
+.no-flag {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--very-light-gray-bg);
+    color: var(--dark-gray-input);
+    font-style: italic;
+}
+
+body.dark-mode .no-flag {
+    background-color: var(--very-dark-blue-bg);
+}
+
+.country-header h2 {
+    margin: 10px 0;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 800;
+}
+
+.country-info {
+    padding: 15px;
+}
+
+.country-info p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.country-info strong {
+    font-weight: 600;
+}
+
+body.dark-mode .country-info strong {
+    color: var(--white);
+}
+
+.no-results,
+.error-message {
+    text-align: center;
+    padding: 2rem;
+    color: var(--dark-gray-input);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Detail page font size */
+.detail-page {
+    font-size: 16px;
 }

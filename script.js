@@ -1,85 +1,134 @@
+// Variable global para almacenar los países
+let allCountries = [];
+
+// Función para cambiar entre modo claro y oscuro
 function darkMode() {
-  var element = document.body;
-  var modeText = document.getElementById("modeText"); // Asume que tienes un elemento para el texto
-  var modeIcon = document.getElementById("modeIcon"); // Asume que tienes un elemento para el icono
+  const element = document.body;
+  const modeText = document.getElementById("modeText");
+  const modeIcon = document.getElementById("modeIcon");
 
   element.classList.toggle("dark-mode");
 
-  // Cambiar el texto
+  // Actualizar el texto y el icono según el modo
   if (element.classList.contains("dark-mode")) {
     modeText.textContent = "Light Mode";
-    modeIcon.innerHTML = "☀️"; // Icono de sol para modo claro
+    modeIcon.innerHTML = "☀️";
   } else {
     modeText.textContent = "Dark Mode";
-    modeIcon.innerHTML = "🌙"; // Icono de luna para modo oscuro
+    modeIcon.innerHTML = "🌙";
   }
+
+  // Guardar la preferencia en localStorage
+  localStorage.setItem("darkMode", element.classList.contains("dark-mode"));
 }
 
+// Función para cargar datos de países desde el archivo JSON
 async function fetchData() {
   try {
     const response = await fetch("data.json");
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
-    allCountries = data; // Guardar todos los países para la búsqueda
+    allCountries = data;
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);
+    return [];
   }
 }
-// Esta función se encarga de mostrar los datos en el contenedor
-// de datos. Se asume que tienes un contenedor con id "dataContainer" en tu HTML.
-// Puedes personalizar el contenido según tus necesidades.
-// Puedes descomentar el siguiente bloque de código para usarlo en tu aplicación.
-// Asegúrate de que el contenedor exista en tu HTML antes de usarlo.
 
+// Función para mostrar los países en la interfaz
+function displayData(countries) {
+  // Obtener el contenedor donde se mostrarán los países
+  const container = document.getElementById("countries-container");
 
-function displayData(data) {
-  const container = document.getElementById("dataContainer");
+  // Verificar si el contenedor existe
+  if (!container) {
+    console.error(
+      "El elemento con id 'countries-container' no se encontró en el DOM"
+    );
+    return;
+  }
 
-  data.forEach((country) => {
-    const countryDiv = document.createElement("div");
-    countryDiv.className = "country";
+  // Limpiar el contenedor antes de agregar nuevos países
+  container.innerHTML = "";
 
-    countryDiv.innerHTML = `
-      <img src="${country.flags.png}" alt="Bandera de ${
-      country.name
-    }" width="100">
-      <h2>${country.name}</h2>
-      <p><strong>Población:</strong> ${country.population.toLocaleString()}</p>
-      <p><strong>Región:</strong> ${country.region}</p>
-      <p><strong>Capital:</strong> ${country.capital || "N/A"}</p>`;
-    container.appendChild(countryDiv);
+  // Verificar si hay países para mostrar
+  if (!countries || countries.length === 0) {
+    container.innerHTML =
+      "<p class='no-results'>No se encontraron países que coincidan con la búsqueda</p>";
+    return;
+  }
+
+  // Mostrar el número de resultados
+  const resultCount = document.createElement("div");
+  resultCount.className = "result-count";
+  resultCount.textContent = `Mostrando ${countries.length} país(es)`;
+  container.appendChild(resultCount);
+
+  // Crear un contenedor para las tarjetas de países
+  const cardsContainer = document.createElement("div");
+  cardsContainer.className = "cards-container";
+  container.appendChild(cardsContainer);
+
+  // Crear un elemento para cada país y agregarlo al contenedor
+  countries.forEach((country) => {
+    // Crear el elemento contenedor para el país
+    const countryElement = document.createElement("div");
+    countryElement.className = "country-card";
+
+    // Obtener las banderas (si están disponibles)
+    const flagUrl = country.flags?.svg || country.flags?.png || "";
+    const flag = flagUrl
+      ? `<img src="${flagUrl}" alt="Bandera de ${country.name}" class="country-flag" loading="lazy">`
+      : "<div class='no-flag'>No flag available</div>";
+
+    // Obtener los idiomas (si están disponibles)
+    let languages = "No disponible";
+    if (country.languages) {
+      if (Array.isArray(country.languages)) {
+        // Si languages es un array de objetos con propiedad name
+        languages = country.languages
+          .filter((lang) => lang && lang.name)
+          .map((lang) => lang.name)
+          .join(", ");
+      } else if (typeof country.languages === "object") {
+        // Si languages es un objeto (formato común en la API Rest Countries v3)
+        languages = Object.values(country.languages).join(", ");
+      }
+    }
+
+    // Dar formato a la población
+    const population = country.population
+      ? new Intl.NumberFormat().format(country.population)
+      : "No disponible";
+
+    // Crear el HTML para el país
+    countryElement.innerHTML = `
+      <div class="country-header">
+        ${flag}
+        <h2>${country.name || "País desconocido"}</h2>
+      </div>
+      <div class="country-info">
+        <p><strong>Capital:</strong> ${country.capital || "No disponible"}</p>
+        <p><strong>Región:</strong> ${country.region || "No disponible"}</p>
+        <p><strong>Subregión:</strong> ${
+          country.subregion || "No disponible"
+        }</p>
+        <p><strong>Población:</strong> ${population}</p>
+        <p><strong>Idiomas:</strong> ${languages}</p>
+      </div>
+    `;
+
+    // Agregar el país al contenedor
+    cardsContainer.appendChild(countryElement);
   });
-
-  data.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "data-item";
-    div.innerHTML = `<h3>${item.title}</h3><p>${item.description}</p>`;
-    container.appendChild(div);
-  });
 }
 
-async function init() {
-  const countries = await fetchData();
-  if (countries) {
-    displayData(countries);
-  }
-}
-init();
-
-let allCountries = []; // Variable para almacenar todos los países
-
-async function fetchData() {
-  try {
-    const response = await fetch("data.json");
-    const data = await response.json();
-    allCountries = data; // Guardar todos los países para la búsqueda
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return []; // Devolver array vacío en caso de error
-  }
-}
-
+// Función para manejar la búsqueda
 function handleSearch() {
   const searchBar = document.getElementById("searchBar");
   if (!searchBar) {
@@ -87,11 +136,17 @@ function handleSearch() {
     return;
   }
 
-  const searchTerm = searchBar.value.toLowerCase();
+  const searchTerm = searchBar.value.toLowerCase().trim();
 
   // Verificar que allCountries sea un array
   if (!Array.isArray(allCountries)) {
     console.error("No hay datos de países disponibles");
+    return;
+  }
+
+  // Si el término de búsqueda está vacío, mostrar todos los países
+  if (searchTerm === "") {
+    displayData(allCountries);
     return;
   }
 
@@ -118,27 +173,51 @@ function handleSearch() {
   });
 
   // Mostrar los países filtrados
-  if (typeof displayData === "function") {
-    displayData(filteredCountries);
-  } else {
-    console.error("Función displayData no definida");
-  }
+  displayData(filteredCountries);
 }
 
+// Función para inicializar la aplicación con un debounce para la búsqueda
 async function init() {
+  // Cargar preferencia de modo oscuro
+  if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark-mode");
+    const modeText = document.getElementById("modeText");
+    const modeIcon = document.getElementById("modeIcon");
+    if (modeText) modeText.textContent = "Light Mode";
+    if (modeIcon) modeIcon.innerHTML = "☀️";
+  }
+
+  // Cargar los datos de países
   const countries = await fetchData();
+
   if (countries && countries.length > 0) {
-    if (typeof displayData === "function") {
-      displayData(countries);
-    } else {
-      console.error("Función displayData no definida");
+    displayData(countries);
+
+    // Configurar el evento de búsqueda con debounce
+    const searchBar = document.getElementById("searchBar");
+    if (searchBar) {
+      // Implementación simple de debounce
+      let debounceTimeout;
+      searchBar.addEventListener("input", function () {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(handleSearch, 300);
+      });
+    }
+
+    // Configurar el botón de modo oscuro
+    const darkModeButton = document.getElementById("darkModeButton");
+    if (darkModeButton) {
+      darkModeButton.addEventListener("click", darkMode);
     }
   } else {
     console.error("No se pudieron cargar los datos de países");
+    const container = document.getElementById("countries-container");
+    if (container) {
+      container.innerHTML =
+        "<p class='error-message'>Error al cargar los datos. Por favor, intenta más tarde.</p>";
+    }
   }
 }
 
-// No iniciar automáticamente si estamos en un entorno de prueba
-if (typeof process === "undefined" || process.env.NODE_ENV !== "test") {
-  init();
-}
+// Iniciar la aplicación cuando el DOM esté cargado
+document.addEventListener("DOMContentLoaded", init);

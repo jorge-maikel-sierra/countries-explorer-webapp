@@ -1,29 +1,42 @@
 <!DOCTYPE html>
-<html lang="es" >
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorador de Países</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API REST Countries</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap" rel="stylesheet">
+    <title>Explorador de Países</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap" rel="stylesheet">
-
 </head>
+
 <body>
     <header class="header">
-    <div class="theme-switch">
-        <h1>Where in the world?</h1>
-        <button onclick="darkMode()">
-            <span id="modeText">Dark Mode</span>
+        <h1>Explorador de Países</h1>
+        <button id="darkModeButton">
             <span id="modeIcon">🌙</span>
+            <span id="modeText">Dark Mode</span>
         </button>
-    </div>
     </header>
-    <input type="text" id="searchBar" placeholder="Buscar países, capitales, regiones, etc." oninput="handleSearch()" />
-    
-<div id="dataContainer">
-    
-</div>
+
+    <div class="search-container">
+        <input type="text" id="searchBar" placeholder="Buscar país por nombre, capital, región, idioma...">
+    </div>
+
+    <div id="countries-container">
+        <!-- Aquí se cargarán los países -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+  <script src="script.js"></script>
 </body>
 </html>
