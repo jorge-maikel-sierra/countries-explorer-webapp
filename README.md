@@ -33,7 +33,7 @@ La guía completa de estilos y decisiones de diseño se encuentra en [style-guid
 
 ### Capturas de pantalla
 
-![Vista previa del diseño en escritorio](desktop-preview.jpg)
+![Vista previa del diseño en escritorio](desktop-preview.png)
 
 ### Enlaces
 
