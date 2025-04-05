@@ -42,10 +42,8 @@ async function fetchData() {
 
 // Función para mostrar los países en la interfaz
 function displayData(countries) {
-  // Obtener el contenedor donde se mostrarán los países
   const container = document.getElementById("countries-container");
 
-  // Verificar si el contenedor existe
   if (!container) {
     console.error(
       "El elemento con id 'countries-container' no se encontró en el DOM"
@@ -53,60 +51,27 @@ function displayData(countries) {
     return;
   }
 
-  // Limpiar el contenedor antes de agregar nuevos países
   container.innerHTML = "";
 
-  // Verificar si hay países para mostrar
   if (!countries || countries.length === 0) {
     container.innerHTML =
       "<p class='no-results'>No se encontraron países que coincidan con la búsqueda</p>";
     return;
   }
 
-  // Mostrar el número de resultados
-  const resultCount = document.createElement("div");
-  resultCount.className = "result-count";
-  resultCount.textContent = `Mostrando ${countries.length} país(es)`;
-  container.appendChild(resultCount);
-
-  // Crear un contenedor para las tarjetas de países
   const cardsContainer = document.createElement("div");
   cardsContainer.className = "cards-container";
   container.appendChild(cardsContainer);
 
-  // Crear un elemento para cada país y agregarlo al contenedor
   countries.forEach((country) => {
-    // Crear el elemento contenedor para el país
     const countryElement = document.createElement("div");
     countryElement.className = "country-card";
 
-    // Obtener las banderas (si están disponibles)
     const flagUrl = country.flags?.svg || country.flags?.png || "";
     const flag = flagUrl
       ? `<img src="${flagUrl}" alt="Bandera de ${country.name}" class="country-flag" loading="lazy">`
       : "<div class='no-flag'>No flag available</div>";
 
-    // Obtener los idiomas (si están disponibles)
-    let languages = "No disponible";
-    if (country.languages) {
-      if (Array.isArray(country.languages)) {
-        // Si languages es un array de objetos con propiedad name
-        languages = country.languages
-          .filter((lang) => lang && lang.name)
-          .map((lang) => lang.name)
-          .join(", ");
-      } else if (typeof country.languages === "object") {
-        // Si languages es un objeto (formato común en la API Rest Countries v3)
-        languages = Object.values(country.languages).join(", ");
-      }
-    }
-
-    // Dar formato a la población
-    const population = country.population
-      ? new Intl.NumberFormat().format(country.population)
-      : "No disponible";
-
-    // Crear el HTML para el país
     countryElement.innerHTML = `
       <div class="country-header">
         ${flag}
@@ -115,15 +80,12 @@ function displayData(countries) {
       <div class="country-info">
         <p><strong>Capital:</strong> ${country.capital || "No disponible"}</p>
         <p><strong>Región:</strong> ${country.region || "No disponible"}</p>
-        <p><strong>Subregión:</strong> ${
-          country.subregion || "No disponible"
-        }</p>
-        <p><strong>Población:</strong> ${population}</p>
-        <p><strong>Idiomas:</strong> ${languages}</p>
       </div>
     `;
 
-    // Agregar el país al contenedor
+    // Agregar evento de clic para mostrar el modal
+    countryElement.addEventListener("click", () => showModal(country));
+
     cardsContainer.appendChild(countryElement);
   });
 }
@@ -221,3 +183,63 @@ async function init() {
 
 // Iniciar la aplicación cuando el DOM esté cargado
 document.addEventListener("DOMContentLoaded", init);
+
+
+
+
+
+
+
+
+
+
+
+
+
+function showModal(country) {
+  const modal = document.getElementById("modal");
+  const modalDetails = document.getElementById("modal-details");
+
+  // Crear el contenido del modal
+  modalDetails.innerHTML = `
+    <h2>${country.name || "País desconocido"}</h2>
+    <img src="${country.flags?.svg || country.flags?.png}" alt="Bandera de ${
+    country.name
+  }" class="country-flag" />
+    <p><strong>Capital:</strong> ${country.capital || "No disponible"}</p>
+    <p><strong>Región:</strong> ${country.region || "No disponible"}</p>
+    <p><strong>Subregión:</strong> ${country.subregion || "No disponible"}</p>
+    <p><strong>Población:</strong> ${
+      new Intl.NumberFormat().format(country.population) || "No disponible"
+    }</p>
+    <p><strong>Idiomas:</strong> ${
+      country.languages
+        ? country.languages.map((lang) => lang.name).join(", ")
+        : "No disponible"
+    }</p>
+    <p><strong>Moneda:</strong> ${
+      country.currencies
+        ? country.currencies.map((currency) => currency.name).join(", ")
+        : "No disponible"
+    }</p>
+  `;
+
+  // Mostrar el modal
+  modal.classList.remove("hidden");
+}
+
+// Función para cerrar el modal
+function closeModal() {
+  const modal = document.getElementById("modal");
+  modal.classList.add("hidden");
+}
+
+// Agregar evento al botón de cerrar
+document.getElementById("closeModal").addEventListener("click", closeModal);
+
+// Agregar evento para cerrar el modal al hacer clic fuera del contenido
+document.getElementById("modal").addEventListener("click", (event) => {
+  if (event.target === event.currentTarget) {
+    closeModal();
+  }
+});
