@@ -37,8 +37,8 @@ La guía completa de estilos y decisiones de diseño se encuentra en [style-guid
 
 ### Enlaces
 
-- URL de solución: [Add solution URL here](https://github.com/jorge-maikel-sierra/countries-explorer-webapp)
-- URL del sitio en directo: [Add live site URL here](https://jorge-maikel-sierra.github.io/countries-explorer-webapp)
+- URL de solución: [URL GITHUB](https://github.com/jorge-maikel-sierra/countries-explorer-webapp)
+- URL del sitio en directo: [URL PRODUCCION](https://jorge-maikel-sierra.github.io/countries-explorer-webapp)
 
 ## Mi proceso
 
